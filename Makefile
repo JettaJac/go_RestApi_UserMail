@@ -1,3 +1,4 @@
+#https://www.youtube.com/watch?v=LxJLuW5aUDQ
 .PHONY: build
 build:
 	go build cmd/main
