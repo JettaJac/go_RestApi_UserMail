@@ -3,6 +3,9 @@ package store
 import (
 	"database/sql"
 
+	// "github.com/golang-migrate/migrate/v4"
+	_ "github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 	_ "github.com/lib/pq"
 )
 
@@ -31,7 +34,12 @@ func (s *Store) Open() error {
 	}
 
 	s.db = db
-
+	// ____
+	// m, err := migrate.New(
+	// 	"github://mattes:personal-access-token@mattes/migrate_test",
+	// 	"postgres://localhost:5432/database?sslmode=enable")
+	// m.Steps(2)
+	// ____
 	return nil
 }
 

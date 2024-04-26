@@ -10,6 +10,16 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+// migrate -path migrations -database "postgres://localhost/restapi_dev?sslmode=disable" force 20240426112011
+// migrate -path migrations -database "postgres://localhost/restapi_dev?sslmode=disable" up
+
+// CREATE TABLE users (
+//     id bigserial not null primary key,
+//     email varchar not null unique,
+//     encrypted_password varchar not null
+// );
+// DROP TABLE users;
+// migrate create -ext sql -dir migrations create_users команда создающая миграции
 // go install github.com/golang-migrate/migrate/v4/cmd/migrate@v4.14.1
 //  postgres://jettajac:K.,jdm2018@host/restapi_dev
 // postgres://jettajac:K.,jdm2018@host:port/restapi_dev?query
