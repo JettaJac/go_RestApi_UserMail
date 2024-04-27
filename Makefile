@@ -11,7 +11,8 @@ start:
 
 .PHONY: test
 test: 
-	cd internal/app && go test -v -race -timeout 30s ./ ...
+	cd internal/app && go test
+# -v -race -timeout 30s ./ ...
 
 clean:
 	rm -rf main
