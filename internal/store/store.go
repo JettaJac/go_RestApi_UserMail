@@ -11,8 +11,9 @@ import (
 
 // Store is the structure for the store
 type Store struct {
-	config *Config
-	db     *sql.DB
+	config         *Config
+	db             *sql.DB
+	userRepository *UserRepository
 }
 
 // New creates a new store
@@ -43,7 +44,18 @@ func (s *Store) Open() error {
 	return nil
 }
 
-// / Close database connection
+// Close database connection
 func (s *Store) Close() {
 	s.db.Close()
+}
+
+// User returns a user repository for the store
+func (s *Store) User() *UserRepository {
+	if s.userRepository != nil {
+		return s.userRepository
+	}
+	s.userRepository = &UserRepository{
+		store: s,
+	}
+	return s.userRepository
 }
