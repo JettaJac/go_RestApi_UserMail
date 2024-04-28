@@ -1,4 +1,4 @@
-package store
+package sqlstore
 
 import (
 	"main/internal/model"
@@ -11,21 +11,21 @@ type UserRepository struct {
 }
 
 // Create a new user in the repository
-func (r *UserRepository) Create(u *model.User) (*model.User, error) {
+func (r *UserRepository) Create(u *model.User) error {
 	if err := u.Validate(); err != nil {
-		return nil, err
+		return err
 	}
 	if err := u.BeforeCreate(); err != nil {
-		return nil, err
+		return err
 	}
-	if err := r.store.db.QueryRow(
+	return r.store.db.QueryRow(
 		"INSERT INTO users (email, encrypted_password) VALUES ($1, $2) RETURNING id",
 		u.Email,
 		u.EncryptedPassword,
-	).Scan(&u.ID); err != nil {
-		return nil, err
+	).Scan(&u.ID) /*; err != nil {
+		return err
 	}
-	return u, nil
+	return nil*/
 }
 
 // FindByEmail finds a user by email
