@@ -9,6 +9,10 @@ import (
 	"github.com/BurntSushi/toml"
 )
 
+// curl -X POST -H "Content-Type: application/json" -d '{"email":"u@e1.ru","password":"password"}' http://localhost:8080/sessions
+// curl -X POST -H "Content-Type: application/json" -d '{"email":"user@mail.com","password":"password"}' http://localhost:8080/sessions
+// curl -X POST -H "Content-Type: application/json" -d '{"email":"user@mail.com","password":"password"}' http://localhost:8080/users
+
 var (
 	configPath string
 )
@@ -26,8 +30,8 @@ func main() {
 		log.Fatal(err)
 	}
 
-	s := app.New(config)
-	if err := s.Run(); err != nil {
+	// s := app.New(config)
+	if err := app.Start(config); err != nil { // сделать на Run
 		log.Fatal(err)
 	}
 	// TODO: init config: cleanenv

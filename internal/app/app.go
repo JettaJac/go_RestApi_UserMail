@@ -1,6 +1,41 @@
 package app
 
 import (
+	"database/sql"
+	"main/internal/store/sqlstore"
+	"net/http"
+	// "github.com/golang-migrate/migrate/v4/database"
+)
+
+// Start app
+func Start(config *Config) error {
+	db, err := newDB(config.DatabaseURL)
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+
+	store := sqlstore.New(db)
+	srv := newServer(store)
+
+	return http.ListenAndServe(config.BindAddr, srv.router)
+}
+
+func newDB(databaseURL string) (*sql.DB, error) {
+	db, err := sql.Open("postgres", databaseURL)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := db.Ping(); err != nil {
+		return nil, err
+	}
+
+	return db, nil
+}
+
+/*
+import (
 	"fmt"
 	"io"
 	"main/internal/store"
@@ -87,3 +122,4 @@ func (s *APIServer) handleHello() http.HandlerFunc {
 		io.WriteString(w, "Hello")
 	}
 }
+*/

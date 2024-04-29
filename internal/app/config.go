@@ -7,6 +7,7 @@ type Config struct {
 	BindAddr string `toml:"bind_addr"` // The bind address to listen on
 	LogLevel string `toml:"log_level"` // The log level to use
 	// Store    *store.Config // The store configuration
+	DatabaseURL string `toml:"database_url"` // The database URL to use
 }
 
 // NewConfig creates a new configuration
