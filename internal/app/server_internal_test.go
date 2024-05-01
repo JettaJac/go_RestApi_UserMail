@@ -8,12 +8,13 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+	"github.com/gorilla/sessions"
 
 	"github.com/stretchr/testify/assert"
 )
 
 func TestServer_HandleUsersCreate(t *testing.T) {
-	s := newServer(teststore.New())
+	s := newServer(teststore.New(), sessions.NewCookieStore([]byte("secret")))
 	testCase := []struct {
 		name         string
 		payloand     interface{}
@@ -58,7 +59,7 @@ func TestServer_HandleSessionCreate(t *testing.T) {
 	u := model.TestUser(t)
 	store := teststore.New()
 	store.User().Create(u)
-	s := newServer(store)
+	s := newServer(store, sessions.NewCookieStore([]byte("secret")))
 	testCase := []struct {
 		name         string
 		payloand     interface{}
@@ -71,6 +72,27 @@ func TestServer_HandleSessionCreate(t *testing.T) {
 				"password": u.Password,
 			},
 			expectedCode: http.StatusOK,
+		},
+		{
+			name: "innvalid payload",
+			payloand: "invalid payload",
+			expectedCode: http.StatusBadRequest,
+		},
+		{
+			name: "invalid email",
+			payloand: map[string]string{
+				"email":    "invalid",
+				"password": u.Password,
+			},
+			expectedCode: http.StatusUnauthorized,
+		},
+		{
+			name: "invalid password",
+			payloand: map[string]string{
+				"email":    u.Email,
+				"password": "invalid",
+			},
+			expectedCode: http.StatusUnauthorized,
 		},
 	}
 

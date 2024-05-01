@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"main/internal/store/sqlstore"
 	"net/http"
+	"github.com/gorilla/sessions"
 	// "github.com/golang-migrate/migrate/v4/database"
 )
 
@@ -16,7 +17,8 @@ func Start(config *Config) error {
 	defer db.Close()
 
 	store := sqlstore.New(db)
-	srv := newServer(store)
+	sessionStore := sessions.NewCookieStore([]byte(config.SessionKey))
+	srv := newServer(store, sessionStore)
 
 	return http.ListenAndServe(config.BindAddr, srv.router)
 }
